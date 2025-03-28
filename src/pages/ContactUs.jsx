@@ -135,6 +135,7 @@ const ContactUs = () => {
     try {
       const response = await fetch('https://doctor-website-backend-production.up.railway.app/api/contacts', {
         method: 'POST',
+        mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
         },
