@@ -125,7 +125,9 @@ const BookAppointment = () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json'
       },
+      mode: 'cors', // Explicitly set CORS mode
       credentials: 'include',
       body: JSON.stringify({
         name: formData.name.value,
