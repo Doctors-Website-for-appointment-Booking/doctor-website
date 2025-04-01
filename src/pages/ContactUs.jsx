@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL, API_ENDPOINTS, API_HEADERS } from "@/config/api";
 import { FaUser, FaMapMarkerAlt, FaCity, FaPhone, FaEnvelope, FaComment, FaArrowLeft } from "react-icons/fa";
 import {
   AlertDialog,
@@ -133,11 +134,9 @@ const ContactUs = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('http://localhost:5353/api/contacts', 'https://doctor-website-backend-production.up.railway.app/api/contacts', {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.CONTACTS}`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: API_HEADERS,
         body: JSON.stringify({
           name: formData.name.value,
           address: formData.address.value,
@@ -148,17 +147,20 @@ const ContactUs = () => {
         }),
       });
 
-      if (response.ok) {
-        setShowSuccessDialog(true);
-        setFormData(init);
-      } else {
-        const errorData = await response.json();
-        setErrorMessage(errorData.message || 'Failed to send message');
-        setShowErrorDialog(true);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+
+      const data = await response.json();
+      setShowSuccessDialog(true);
+      setFormData(init);
     } catch (error) {
-      console.error("Error:", error);
-      setErrorMessage("An error occurred while sending the message");
+      console.error("API Error:", error);
+      setErrorMessage(
+        error.message.includes('Failed to fetch') 
+          ? "Could not connect to the server. Please try again later."
+          : error.message || 'Failed to send message'
+      );
       setShowErrorDialog(true);
     } finally {
       setIsSubmitting(false);
@@ -427,7 +429,6 @@ const ContactUs = () => {
             <div className="flex items-start">
               <FaPhone className="text-teal-500 mt-1 mr-3 flex-shrink-0" />
               <div>
-
                 <a
                   href="tel:+917697855964"
                   className="text-gray-600 hover:text-teal-600 transition-colors flex items-center"
