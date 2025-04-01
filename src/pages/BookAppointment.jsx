@@ -117,40 +117,40 @@ const BookAppointment = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    try {
-      const response = await fetch('http://localhost:5353/api/appointments', 'https://doctor-website-backend-production.up.railway.app/api/appointments',{
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name.value,
-          mobile: formData.mobile.value,
-          email: formData.email.value,
-          date: formData.date.value,
-          reason: formData.reason.value,
-        }),
-      });
+  e.preventDefault();
+  setIsSubmitting(true);
+  
+  try {
+    const response = await fetch('https://doctor-website-backend-production.up.railway.app/api/appointments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        name: formData.name.value,
+        mobile: formData.mobile.value,
+        email: formData.email.value,
+        date: formData.date.value,
+        reason: formData.reason.value,
+      })
+    });
 
-      if (response.ok) {
-        setShowSuccessDialog(true);
-        setFormData(init);
-      } else {
-        const errorData = await response.json();
-        setErrorMessage(errorData.message || 'Failed to book appointment');
-        setShowErrorDialog(true);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setErrorMessage("An error occurred while booking the appointment");
-      setShowErrorDialog(true);
-    } finally {
-      setIsSubmitting(false);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-  };
+
+    const data = await response.json();
+    setShowSuccessDialog(true);
+    setFormData(init);
+  } catch (error) {
+    console.error("Fetch error:", error);
+    setErrorMessage(error.message || 'Failed to book appointment');
+    setShowErrorDialog(true);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   const handleBack = () => {
     navigate("/");
