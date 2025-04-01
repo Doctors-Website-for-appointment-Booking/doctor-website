@@ -121,7 +121,7 @@ const BookAppointment = () => {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch('doctor-website-backend.railway.internal/api/appointments', {
+      const response = await fetch('doctor-website-backend-production.up.railway.app/api/appointments', {
         method: 'POST',
         mode: 'cors', // Explicitly enable CORS mode
         headers: {
