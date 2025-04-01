@@ -133,7 +133,7 @@ const ContactUs = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('doctor-website-backend.railway.internal/api/contacts', {
+      const response = await fetch('doctor-website-backend-production.up.railway.app/api/contacts', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
