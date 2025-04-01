@@ -126,6 +126,7 @@ const BookAppointment = () => {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify({
         name: formData.name.value,
         mobile: formData.mobile.value,
