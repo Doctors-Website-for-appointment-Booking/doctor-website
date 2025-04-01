@@ -121,12 +121,10 @@ const BookAppointment = () => {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch('doctor-website-backend-production.up.railway.app/api/appointments', {
+      const response = await fetch('http://localhost:5353/api/appointments', 'doctor-website-backend-production.up.railway.app/api/appointments'{
         method: 'POST',
-        mode: 'cors', // Explicitly enable CORS mode
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
         },
         body: JSON.stringify({
           name: formData.name.value,
@@ -137,19 +135,17 @@ const BookAppointment = () => {
         }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(
-          errorData.message || 
-          `Server responded with ${response.status}: ${response.statusText}`
-        );
+      if (response.ok) {
+        setShowSuccessDialog(true);
+        setFormData(init);
+      } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || 'Failed to book appointment');
+        setShowErrorDialog(true);
       }
-
-      setShowSuccessDialog(true);
-      setFormData(init);
     } catch (error) {
       console.error("Error:", error);
-      setErrorMessage(error.message || "An error occurred while booking the appointment");
+      setErrorMessage("An error occurred while booking the appointment");
       setShowErrorDialog(true);
     } finally {
       setIsSubmitting(false);
@@ -342,8 +338,8 @@ const BookAppointment = () => {
                   placeholder="Please describe the reason for your visit..."
                 />
                 {formData.reason.touched && !formData.reason.valid && (
-                    <p className="text-red-500 text-sm">{formData.reason.error}</p>
-                  )}
+                  <p className="text-red-500 text-sm">{formData.reason.error}</p>
+                )}
               </div>
 
               {/* Buttons */}
