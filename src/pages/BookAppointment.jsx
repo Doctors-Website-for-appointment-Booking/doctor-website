@@ -117,41 +117,40 @@ const BookAppointment = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    try {
-      const response = await fetch('https://doctor-website-backend-production.up.railway.app/api/contacts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name.value,
-          address: formData.address.value,
-          city: formData.city.value,
-          mobile: formData.mobile.value,
-          email: formData.email.value,
-          comments: formData.comments.value,
-        }),
-      });
+  e.preventDefault();
+  setIsSubmitting(true);
+  
+  try {
+    const response = await fetch('https://doctor-website-backend-production.up.railway.app/api/appointments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: formData.name.value,
+        mobile: formData.mobile.value,
+        email: formData.email.value,
+        date: formData.date.value,
+        reason: formData.reason.value, // Changed from comments to reason
+      }),
+    });
 
-      if (response.ok) {
-        setShowSuccessDialog(true);
-        setFormData(init);
-      } else {
-        const errorData = await response.json();
-        setErrorMessage(errorData.message || 'Failed to send message');
-        setShowErrorDialog(true);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setErrorMessage("An error occurred while sending the message");
+    if (response.ok) {
+      setShowSuccessDialog(true);
+      setFormData(init);
+    } else {
+      const errorData = await response.json();
+      setErrorMessage(errorData.message || 'Failed to book appointment');
       setShowErrorDialog(true);
-    } finally {
-      setIsSubmitting(false);
     }
-  };
+  } catch (error) {
+    console.error("Error:", error);
+    setErrorMessage("An error occurred while booking the appointment");
+    setShowErrorDialog(true);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   const handleBack = () => {
     navigate("/");
