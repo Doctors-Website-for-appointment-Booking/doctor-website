@@ -123,7 +123,6 @@ const BookAppointment = () => {
     try {
       const response = await fetch('https://doctor-website-backend-production.up.railway.app/api/appointments', {
         method: 'POST',
-        mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
         },
