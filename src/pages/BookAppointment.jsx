@@ -121,7 +121,7 @@ const BookAppointment = () => {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch('http://localhost:5353/api/appointments', 'doctor-website-backend-production.up.railway.app/api/appointments'{
+      const response = await fetch('http://localhost:5353/api/appointments', 'https://doctor-website-backend-production.up.railway.app/api/appointments',{
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
