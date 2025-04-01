@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL, API_ENDPOINTS, API_HEADERS } from "@/config/api";
 import { FaCalendarAlt, FaUser, FaPhone, FaEnvelope, FaNotesMedical, FaArrowLeft } from "react-icons/fa";
 import {
   AlertDialog,
@@ -117,44 +118,41 @@ const BookAppointment = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setIsSubmitting(true);
-  
-  try {
-    const response = await fetch('https://shyamhomeopathy.com/api/appointments', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      mode: 'cors', // Explicitly set CORS mode
-      credentials: 'include',
-      body: JSON.stringify({
-        name: formData.name.value,
-        mobile: formData.mobile.value,
-        email: formData.email.value,
-        date: formData.date.value,
-        reason: formData.reason.value, // Changed from comments to reason
-      }),
-    });
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.APPOINTMENTS}`, {
+        method: 'POST',
+        headers: API_HEADERS,
+        body: JSON.stringify({
+          name: formData.name.value,
+          mobile: formData.mobile.value,
+          email: formData.email.value,
+          date: formData.date.value,
+          reason: formData.reason.value,
+        }),
+      });
 
-    if (response.ok) {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
       setShowSuccessDialog(true);
       setFormData(init);
-    } else {
-      const errorData = await response.json();
-      setErrorMessage(errorData.message || 'Failed to book appointment');
+    } catch (error) {
+      console.error("API Error:", error);
+      setErrorMessage(
+        error.message.includes('Failed to fetch') 
+          ? "Could not connect to the server. Please try again later."
+          : error.message || 'Failed to book appointment'
+      );
       setShowErrorDialog(true);
+    } finally {
+      setIsSubmitting(false);
     }
-  } catch (error) {
-    console.error("Error:", error);
-    setErrorMessage("An error occurred while booking the appointment");
-    setShowErrorDialog(true);
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
+  };
   const handleBack = () => {
     navigate("/");
   };
