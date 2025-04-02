@@ -24,7 +24,7 @@ exports.handler = async (event) => {
 
     // Email to Doctor
     const doctorMailOptions = {
-      from: process.env.EMAIL_USER,
+        from: `"Shyam Homeopathy Clinic" <${process.env.EMAIL_USER}>`,
       to: process.env.DOCTOR_EMAIL, // Doctor's email
       subject: "New Appointment Request",
       text: `New appointment request:\n\nName: ${name}\nMobile: ${mobile}\nEmail: ${email}\nDate: ${date}\nReason: ${reason}`,
@@ -32,10 +32,10 @@ exports.handler = async (event) => {
 
     // Confirmation Email to User
     const userMailOptions = {
-      from: process.env.EMAIL_USER,
+        from: `"Shyam Homeopathy Clinic" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: "Appointment Confirmation",
-      text: `Hello ${name},\n\nYour appointment request has been received.\n\nDate: ${date}\nReason: ${reason}\n\nWe'll send you a reminder one day before your appointment.\n\nBest regards,\nDr. Sudhir S. Jadon's Clinic`,
+      text: `Hello ${name},\n\nYour appointment request has been received.\n\nDate: ${date}\nReason: ${reason}\n\nWe'll send you a reminder one day before your appointment.\n\nBest regards,\nDr. Sudhir S. Jadon`,
     };
 
     // Send emails
