@@ -22,20 +22,35 @@ exports.handler = async (event) => {
       },
     });
 
-    // Email to Doctor
+    // HTML Email to Doctor
     const doctorMailOptions = {
-        from: `"Shyam Homeopathy Clinic" <${process.env.EMAIL_USER}>`,
+      from: `"Shyam Homeopathy Clinic" <${process.env.EMAIL_USER}>`,
       to: process.env.DOCTOR_EMAIL, // Doctor's email
       subject: "New Appointment Request",
-      text: `New appointment request:\n\nName: ${name}\nMobile: ${mobile}\nEmail: ${email}\nDate: ${date}\nReason: ${reason}`,
+      html: `
+        <h2>New Appointment Request</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Mobile:</strong> ${mobile}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Date:</strong> ${date}</p>
+        <p><strong>Reason:</strong> ${reason}</p>
+      `,
     };
 
-    // Confirmation Email to User
+    // HTML Confirmation Email to User
     const userMailOptions = {
-        from: `"Shyam Homeopathy Clinic" <${process.env.EMAIL_USER}>`,
+      from: `"Shyam Homeopathy Clinic" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: "Appointment Confirmation",
-      text: `Hello ${name},\n\nYour appointment request has been received.\n\nDate: ${date}\nReason: ${reason}\n\nWe'll send you a reminder one day before your appointment.\n\nBest regards,\nDr. Sudhir S. Jadon`,
+      html: `
+        <h2>Hello ${name},</h2>
+        <p>Thank you for requesting an appointment.</p>
+        <p><strong>Date:</strong> ${date}</p>
+        <p><strong>Reason:</strong> ${reason}</p>
+        <p>We will send you a reminder one day before your appointment.</p>
+        <p>Best regards,</p>
+        <p><strong>Dr. Sudhir S. Jadon</strong></p>
+      `,
     };
 
     // Send emails
