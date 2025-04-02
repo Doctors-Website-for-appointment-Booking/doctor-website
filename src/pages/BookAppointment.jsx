@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
-import { API_BASE_URL, API_ENDPOINTS, API_HEADERS } from "@/config/api";
 import { FaCalendarAlt, FaUser, FaPhone, FaEnvelope, FaNotesMedical, FaArrowLeft } from "react-icons/fa";
 import {
   AlertDialog,
@@ -122,9 +121,11 @@ const BookAppointment = () => {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.APPOINTMENTS}`, {
+      const response = await fetch('/.netlify/functions/submitAppointment', {
         method: 'POST',
-        headers: API_HEADERS,
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           name: formData.name.value,
           mobile: formData.mobile.value,
@@ -134,25 +135,23 @@ const BookAppointment = () => {
         }),
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (response.ok) {
+        setShowSuccessDialog(true);
+        setFormData(init);
+      } else {
+        const errorData = await response.json();
+        setErrorMessage(errorData.message || 'Failed to book appointment');
+        setShowErrorDialog(true);
       }
-
-      const data = await response.json();
-      setShowSuccessDialog(true);
-      setFormData(init);
     } catch (error) {
-      console.error("API Error:", error);
-      setErrorMessage(
-        error.message.includes('Failed to fetch') 
-          ? "Could not connect to the server. Please try again later."
-          : error.message || 'Failed to book appointment'
-      );
+      console.error("Error:", error);
+      setErrorMessage("An error occurred while booking the appointment");
       setShowErrorDialog(true);
     } finally {
       setIsSubmitting(false);
     }
   };
+
   const handleBack = () => {
     navigate("/");
   };
