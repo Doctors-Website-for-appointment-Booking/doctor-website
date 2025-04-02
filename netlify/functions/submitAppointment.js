@@ -35,7 +35,7 @@ exports.handler = async (event) => {
       from: process.env.EMAIL_USER,
       to: email,
       subject: "Appointment Confirmation",
-      text: `Hello ${name},\n\nYour appointment request has been received.\n\nDate: ${date}\nReason: ${reason}\n\nWe will contact you soon.\n\nBest regards,\nDr. Sudhir S. Jadon's Clinic`,
+      text: `Hello ${name},\n\nYour appointment request has been received.\n\nDate: ${date}\nReason: ${reason}\n\nWe'll send you a reminder one day before your appointment.\n\nBest regards,\nDr. Sudhir S. Jadon's Clinic`,
     };
 
     // Send emails
