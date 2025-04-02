@@ -43,10 +43,16 @@ exports.handler = async (event) => {
       to: email,
       subject: "Appointment Confirmation",
       html: `
-        <h2>Hello ${name},</h2>
-        <p>Thank you for requesting an appointment.</p>
-        <p><strong>Date:</strong> ${date}</p>
-        <p><strong>Reason:</strong> ${reason}</p>
+        <h3>Thank you for requesting an appointment.</h3>
+         <p>Dear ${name},</p>
+         <p>Thank you for booking an appointment with <strong>Shyam Homeopathy Clinic</strong></p>
+         <p><strong>Your Details:</strong></p>
+         <ul>
+          <li><strong>Date:</strong> ${date}</li>
+          <li><strong>Reason:</strong> ${reason}</li>
+          <li><strong>Mobile:</strong> ${mobile}</li>
+          <li><strong>Email:</strong> ${email}</li>
+        </ul>
         <p>We will send you a reminder one day before your appointment.</p>
         <p>Best regards,</p>
         <p><strong>Dr. Sudhir S. Jadon</strong></p>
